@@ -1,0 +1,22 @@
+---
+
+const allPosts = await Astro.glob('../pages/blog/*.md');
+const nonDraftPosts = allPosts.filter((post) => !post.frontmatter.draft);
+const categories = [...new Set(nonDraftPosts.map((post) => post.frontmatter.category).flat())];
+
+
+---
+<ul class="grow shrink px-4 my-2 ml-5">
+    <li class="menu-title pt-4 -ml-5">
+      <span>Blog</span>
+    </li>
+    <!-- <li class="link link-secondary pl-4 border-l"><a class="">Yazılım</a></li>
+    <li class="link link-secondary pl-4 border-l"><a class="">Tiyatro</a></li>
+    <li class="link link-secondary pl-4 border-l"><a class="">Diğer</a></li> -->
+    {
+      categories.map((category) => (
+      <li class="link link-secondary pl-4 border-l"><a href={`/blog/category/${category}`}>{category}</a></li>
+      ))
+    }
+    
+  </ul>

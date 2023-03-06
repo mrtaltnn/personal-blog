@@ -1,0 +1,26 @@
+---
+const { url, title, description, tags, pubDate, image } = Astro.props;
+---
+
+<div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/2">
+  <div class="card w-94 shadow-xl glass">
+    <figure>
+      <a href={url}> <img src={image.url} alt={image.alt} /></a>
+    </figure>
+    <div class="card-body">
+      <a href={url}>
+        <h2 class="card-title">
+          {title}
+          <div class="badge badge-secondary">NEW</div>
+        </h2>
+      </a>
+
+      <p>{description}</p>
+      <div class="card-actions justify-end">
+        {tags.map((tag: any) => <div class="badge badge-outline">       
+          <a href={`/blog/tag/${tag}`}>{tag}</a>
+          </div>)}
+      </div>
+    </div>
+  </div>
+</div>

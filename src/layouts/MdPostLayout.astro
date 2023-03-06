@@ -1,0 +1,40 @@
+---
+import Layout from './Layout.astro';
+
+interface Frontmatter {
+  title: string;
+  author: string;
+  pubDate: string;
+  description:string;
+  image:{
+    url:string;
+    alt:string;
+  };
+  tags:any;
+}
+
+interface Props {
+  frontmatter: Frontmatter;
+}
+
+const props:Props = Astro.props;
+---
+<Layout title={props.frontmatter.title}>
+    <main class="md:flex md:justify-center">
+        <article class="prose prose-lg max-w-[750px] prose-img:mx-auto">
+          {props.frontmatter.image && <img src={props.frontmatter.image.url} alt={props.frontmatter.image.alt} class="w-full mb-6" />}
+          <h1 class="title my-2 text-4xl font-bold">{props.frontmatter.title}</h1>
+          <!-- {pubDate && <time>{displayDate}</time>}
+          {
+            updatedDate && (
+              <div>
+                {" "}
+                Last updated on <time>{updatedDate}</time>{" "}
+              </div>
+            )
+          } -->
+          <div class="divider my-2"></div>
+          <slot />
+        </article>
+      </main>
+</Layout>
