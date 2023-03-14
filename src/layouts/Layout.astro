@@ -22,7 +22,8 @@ const { image, title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.prop
 		<Head title={title} description={description} image={image} />
 	</head>
 	<body>
-		<div class="bg-base-100 drawer drawer-mobile rounded-box">
+		<div class="gg-container-main"></div>
+		<div class="bg-base-100 drawer drawer-mobile rounded-r-box">
 			<input id="my-drawer" type="checkbox" class="drawer-toggle" />
 			<div class="drawer-content flex flex-col bg-base-100">
 			  <Header title={SITE_TITLE} />

@@ -17,6 +17,5 @@ const categories = [...new Set(nonDraftPosts.map((post) => post.frontmatter.cate
       categories.map((category) => (
       <li class="link link-secondary pl-4 border-l"><a href={`/blog/category/${category}`}>{category}</a></li>
       ))
-    }
-    
+    }    
   </ul>

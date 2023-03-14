@@ -1,0 +1,69 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Gallery from "../../components/gallery/Gallery.astro";
+import clientFetch from "../../utils/clientFetch";
+
+const pohotoDataList = [
+  {
+    src: "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80",
+    alt: "",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1399&q=80",
+    alt: "",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+    alt: "",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+    alt: "",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1560393464-5c69a73c5770?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+    alt: "",
+  },
+  {
+    src: "https://source.unsplash.com/random/700x400/?subway",
+    alt: "subway",
+  },
+  {
+    src: "https://source.unsplash.com/random/?city",
+    alt: "city",
+  },
+  {
+    src: "https://source.unsplash.com/random/700x300/?fruit",
+    alt: "fruit",
+  },
+  {
+    src: "https://source.unsplash.com/random/700x500/?forest",
+    alt: "forest",
+  },
+  {
+    src: "https://source.unsplash.com/random/?sunset",
+    alt: "sunset",
+  },
+  {
+    src: "https://source.unsplash.com/random/?desert",
+    alt: "desert",
+  },
+  {
+    src: "https://source.unsplash.com/random/700x250/?ocean",
+    alt: "ocean",
+  },
+  {
+    src: "https://source.unsplash.com/random/700x300/?clouds",
+    alt: "clouds",
+  },
+];
+
+const testApi = await clientFetch.get<string>(`gallery`);
+
+---
+
+<Layout title="Gallery">
+  <div>{testApi}</div>
+  <div class="text-5xl font-caveat"> Fotoğrafladıklarım</div>
+  <Gallery pohotoDataList={pohotoDataList}/>
+</Layout>

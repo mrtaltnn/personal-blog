@@ -1,15 +1,16 @@
 ---
-import avatar from '../../public/avatar.webp';
+import { Image } from "astro:assets";
+import avatar from '../assets/avatar.webp'
 import BlogMenu from './BlogMenu.astro';
 ---
-<div class="drawer-side bg-base-200 rounded-box">
+<div class="drawer-side bg-base-200 rounded-r-box">
     <label for="my-drawer" class="drawer-overlay bg-base-200"></label>
-    <div class="menu flex flex-col flex-nowrap p-4 overflow-y-auto w-[21rem] bg-base-200 text-base-content rounded-box">
+    <div class="menu flex flex-col flex-nowrap p-4 overflow-y-auto w-[21rem] bg-base-200 text-base-content rounded-r-box">
       <div class="w-fit pt-10">
         <a href="/">
           <div class="avatar transition ease-in-out w-5/6 hover:scale-[102%] block m-auto mt-3 mb-6">
             <div>
-              <img class="mask mask-squircle" src={avatar} alt="mertaltun profile image" />
+              <Image class="mask mask-squircle" src={avatar.src} width={avatar.width} height={avatar.height}   alt="mertaltun profile image" />
             </div>
           </div>
         </a>
@@ -17,18 +18,29 @@ import BlogMenu from './BlogMenu.astro';
       
       <ul class="shrink px-4 my-2">
         <li>
-          <a href="/">
+          <a href="/"  class="font-caveat text-xl">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
           Ana Sayfa
           </a>
         </li>
         <li>
-          <a href="mailto:mert@mertaltun.com">
+          <a href="mailto:mert@mertaltun.com"  class="font-caveat text-xl">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
             </svg>
             
             İletişim
+          </a>
+        </li>
+                <li>
+          <a href="/gallery" class="font-caveat text-xl">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+            </svg>
+            
+            
+            Fotoğrafladıklarım
           </a>
         </li>
         

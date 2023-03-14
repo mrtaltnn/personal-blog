@@ -6,7 +6,7 @@ tags: ["astro", "blogging", "learning in public"]
 category: 'Diğer'
 pubDate: 2022-07-01
 image:
-    url: 'https://astro.build/assets/blog/astro-1-release-update/cover.jpeg' 
+    url: 'https://source.unsplash.com/I1ASdgphUH4/800x599' 
     alt: 'The Astro logo with the word One.'
 draft: false
 ---
