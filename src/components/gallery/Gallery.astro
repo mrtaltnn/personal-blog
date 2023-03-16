@@ -1,27 +1,42 @@
 ---
 export interface Props {
-	pohotoDataList: {
-    src:string,
-    alt:string
+  pohotoDataList: {
+    id: string;
+    description: string;
+    alt: string;
+    width: number;
+    height: number;
+    color: string;
+    blur_hash: string;
+    urls: {
+      raw: string;
+      full: string;
+      regular: string;
+      small: string;
+      thumb: string;
+      small_s3: string;
+    };
   }[];
 }
-const { pohotoDataList} = Astro.props;
+const { pohotoDataList } = Astro.props;
 ---
 
-
-<div class="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4 p-8">
+<div class="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4 p-8 posts">
   <!-- <div class="columns-3xs md:columns-xs lg:columns-md gap-4 space-y-4 p-8">  -->
   {
     pohotoDataList.map((photo) => (
       <div class={`h-min w-full rounded-xl img-box`}>
         <img
           class="h-full w-full object-cover rounded-xl"
-          src={photo.src}
+          src={photo.urls.regular}
           alt={photo.alt}
         />
       </div>
     ))
   }
+</div>
+<div class="load-more md:flex md:justify-center">
+  <a href="#" class="btn btn-outline btn-secondary btn-load-more">Load More</a>
 </div>
 
 <style is:global>
@@ -108,144 +123,220 @@ const { pohotoDataList} = Astro.props;
 </style>
 
 <script is:inline>
-  const root = document.querySelector("body, html");
-  const container = document.querySelector(".gg-container-main");
-  const images = document.querySelectorAll(".img-box > img");
-  const l = images.length;
+      const root = document.querySelector("body, html");
+    const container = document.querySelector(".gg-container-main");
 
-  for (var i = 0; i < l; i++) {
-    images[i].addEventListener("click", function (i) {
-      var currentImg = this;
-      const parentItem = currentImg.parentElement,
-        screenItem = document.createElement("div");
-      screenItem.id = "gg-screen";
-      container.prepend(screenItem);
-      if (parentItem.hasAttribute("data-theme"))
-        screenItem.setAttribute("data-theme", "dark");
-      var route = currentImg.src;
-      root.style.overflow = "hidden";
-      screenItem.innerHTML =
-        '<div class="gg-image"></div><div class="gg-close gg-btn rounded">✖️</div><div class="gg-next gg-btn rounded">➡️</div><div class="gg-prev gg-btn rounded">⬅️</div>';
-      const first = images[0].src,
-        last = images[l - 1].src;
-      const imgItem = document.querySelector(".gg-image"),
-        prevBtn = document.querySelector(".gg-prev"),
-        nextBtn = document.querySelector(".gg-next"),
-        close = document.querySelector(".gg-close");
-      imgItem.innerHTML = '<img class="rounded-xl" src="' + route + '">';
+  const createGallery = function () {
+    console.log("çalıştıııı");
+    //#region image gallery
+    const images = document.querySelectorAll(".img-box > img");
+    const l = images.length;
+    console.log(l);
 
-      if (l > 1) {
-        if (route == first) {
+    for (var i = 0; i < l; i++) {
+      images[i].addEventListener("click", function (i) {
+        var currentImg = this;
+        const parentItem = currentImg.parentElement,
+          screenItem = document.createElement("div");
+        screenItem.id = "gg-screen";
+        container.prepend(screenItem);
+        if (parentItem.hasAttribute("data-theme"))
+          screenItem.setAttribute("data-theme", "dark");
+        var route = currentImg.src;
+        root.style.overflow = "hidden";
+        screenItem.innerHTML =
+          '<div class="gg-image"></div><div class="gg-close gg-btn rounded">✖️</div><div class="gg-next gg-btn rounded">➡️</div><div class="gg-prev gg-btn rounded">⬅️</div>';
+        const first = images[0].src,
+          last = images[l - 1].src;
+        const imgItem = document.querySelector(".gg-image"),
+          prevBtn = document.querySelector(".gg-prev"),
+          nextBtn = document.querySelector(".gg-next"),
+          close = document.querySelector(".gg-close");
+        imgItem.innerHTML = '<img class="rounded-xl" src="' + route + '">';
+
+        if (l > 1) {
+          if (route == first) {
+            prevBtn.hidden = true;
+            var prevImg = false;
+            var nextImg = currentImg.nextElementSibling;
+          } else if (route == last) {
+            nextBtn.hidden = true;
+            var nextImg = false;
+            var prevImg = currentImg.previousElementSibling;
+          } else {
+            var prevImg = currentImg.previousElementSibling;
+            var nextImg = currentImg.nextElementSibling;
+          }
+        } else {
           prevBtn.hidden = true;
-          var prevImg = false;
-          var nextImg = currentImg.nextElementSibling;
-        } else if (route == last) {
           nextBtn.hidden = true;
-          var nextImg = false;
-          var prevImg = currentImg.previousElementSibling;
-        } else {
-          var prevImg = currentImg.previousElementSibling;
-          var nextImg = currentImg.nextElementSibling;
-        }
-      } else {
-        prevBtn.hidden = true;
-        nextBtn.hidden = true;
-      }
-
-      screenItem.addEventListener("click", function (e) {
-        if (e.target == this || e.target == close) hide();
-      });
-
-      root.addEventListener("keydown", function (e) {
-        if (e.keyCode == 37 || e.keyCode == 38) prev();
-        if (e.keyCode == 39 || e.keyCode == 40) next();
-        if (e.keyCode == 27) hide();
-      });
-
-      prevBtn.addEventListener("click", prev);
-      nextBtn.addEventListener("click", next);
-
-      // Swipe Up / Down / Left / Right
-      var swipeCont = document.querySelector(".gg-container-main");
-
-      swipeCont.addEventListener("touchstart", startTouch, false);
-      swipeCont.addEventListener("touchmove", moveTouch, false);
-
-      var initialX = null;
-      var initialY = null;
-
-      function startTouch(e) {
-        initialX = e.touches[0].clientX;
-        initialY = e.touches[0].clientY;
-      }
-
-      function moveTouch(e) {
-        if (initialX === null) {
-          return;
         }
 
-        if (initialY === null) {
-          return;
+        document.querySelector(".gg-image").addEventListener("click", (e) => {
+          hide();
+        });
+
+        screenItem.addEventListener("click", function (e) {
+          if (e.target == this || e.target == close) hide();
+        });
+
+        root.addEventListener("keydown", function (e) {
+          if (e.keyCode == 37 || e.keyCode == 38) prev();
+          if (e.keyCode == 39 || e.keyCode == 40) next();
+          if (e.keyCode == 27) hide();
+        });
+
+        prevBtn.addEventListener("click", prev);
+        nextBtn.addEventListener("click", next);
+
+        //#region swiping
+        var swipeCont = document.querySelector(".gg-container-main");
+
+        swipeCont.addEventListener("touchstart", startTouch, false);
+        swipeCont.addEventListener("touchmove", moveTouch, false);
+
+        var initialX = null;
+        var initialY = null;
+
+        function startTouch(e) {
+          initialX = e.touches[0].clientX;
+          initialY = e.touches[0].clientY;
         }
 
-        var currentX = e.touches[0].clientX;
-        var currentY = e.touches[0].clientY;
-
-        var diffX = initialX - currentX;
-        var diffY = initialY - currentY;
-
-        if (Math.abs(diffX) > Math.abs(diffY)) {
-          // sliding horizontally
-          if (diffX > 0) {
-            // swiped left
-            next();
-          } else {
-            // swiped right
-            prev();
+        function moveTouch(e) {
+          if (initialX === null) {
+            return;
           }
-        } else {
-          // sliding vertically
-          if (diffY > 0) {
-            // swiped up
-            prev();
-          } else {
-            // swiped down
-            next();
+
+          if (initialY === null) {
+            return;
           }
+
+          var currentX = e.touches[0].clientX;
+          var currentY = e.touches[0].clientY;
+
+          var diffX = initialX - currentX;
+          var diffY = initialY - currentY;
+
+          if (Math.abs(diffX) > Math.abs(diffY)) {
+            // sliding horizontally
+            if (diffX > 0) {
+              // swiped left
+              next();
+            } else {
+              // swiped right
+              prev();
+            }
+          } else {
+            // sliding vertically
+            if (diffY > 0) {
+              // swiped up
+              prev();
+            } else {
+              // swiped down
+              next();
+            }
+          }
+
+          initialX = null;
+          initialY = null;
+
+          e.preventDefault();
+        }
+        //#endregion swiping
+
+        function prev() {
+          var parentDiv = currentImg.previousSibling.parentElement;
+          var previousImgDiv = parentDiv.previousElementSibling;
+          prevImg = previousImgDiv.lastElementChild;
+          imgItem.innerHTML = '<img src="' + prevImg.src + '">';
+          currentImg = previousImgDiv.lastElementChild;
+          var mainImg = document.querySelector(".gg-image > img").src;
+          nextBtn.hidden = false;
+          prevBtn.hidden = mainImg === first;
         }
 
-        initialX = null;
-        initialY = null;
+        function next() {
+          var parentDiv = currentImg.nextSibling.parentElement;
+          var nextImgDiv = parentDiv.nextElementSibling;
+          nextImg = nextImgDiv.lastElementChild;
+          imgItem.innerHTML = '<img src="' + nextImg.src + '">';
+          currentImg = nextImgDiv.lastElementChild;
+          var mainImg = document.querySelector(".gg-image > img").src;
+          prevBtn.hidden = false;
+          nextBtn.hidden = mainImg === last;
+        }
 
-        e.preventDefault();
-      }
+        function hide() {
+          root.style.overflow = "auto";
+          screenItem.remove();
+        }
+      });
+    }
+    //#endregion image gallery
+  };
 
-      function prev() {
-        var parentDiv = currentImg.previousSibling.parentElement;
-        var previousImgDiv = parentDiv.previousElementSibling;
-        prevImg = previousImgDiv.lastElementChild;
-        imgItem.innerHTML = '<img src="' + prevImg.src + '">';
-        currentImg = previousImgDiv.lastElementChild;
-        var mainImg = document.querySelector(".gg-image > img").src;
-        nextBtn.hidden = false;
-        prevBtn.hidden = mainImg === first;
-      }
+  createGallery();
 
-      function next() {
-        var parentDiv = currentImg.nextSibling.parentElement;
-        var nextImgDiv = parentDiv.nextElementSibling;
-        nextImg = nextImgDiv.lastElementChild;
-        imgItem.innerHTML = '<img src="' + nextImg.src + '">';
-        currentImg = nextImgDiv.lastElementChild;
-        var mainImg = document.querySelector(".gg-image > img").src;
-        prevBtn.hidden = false;
-        nextBtn.hidden = mainImg === last;
-      }
 
-      function hide() {
-        root.style.overflow = "auto";
-        screenItem.remove();
-      }
-    });
-  }
+
+  //#region infiniteLoad
+  const infiniteLoad = (() => {
+    var page = 1;
+
+    let postsLoaded = false;
+    let postsContent = document.querySelector(".posts");
+    let btnLoadMore = document.querySelector(".btn-load-more");
+
+    const loadContent = function () {
+      console.log("buda çalıştııı");
+      page++;
+
+      const loadPosts = async () => {
+        const url = `http://localhost:3000/api/gallery?page=${page}`;
+        const request = await fetch(url);
+        const posts = await request.json();
+        var data = posts.data;
+
+        const postsHtml = renderPostHtml(data);
+        postsContent.innerHTML += postsHtml;
+        postsLoaded = true;
+      };
+
+      const renderPostHtml = (posts) => {
+        let postHtml = "";
+        posts.map(function (x) {
+          postHtml += `<div class="h-min w-full rounded-xl img-box"><img class="h-full w-full object-cover rounded-xl"src="${x.urls.regular}"alt=""${x.alt}/></div>`;
+        });
+        return postHtml;
+      };
+
+      loadPosts();
+      createGallery();
+    };
+
+    if ("IntersectionObserver" in window) {
+      const loadMoreCallback = (entries, observer) => {
+        entries.forEach((btn) => {
+          if (btn.isIntersecting && postsLoaded === true) {
+            postsLoaded = false;
+            loadContent();
+          }
+        });
+      };
+
+      let loadMoreObserver = new IntersectionObserver(loadMoreCallback, {
+        threshold: 1.0,
+      });
+      loadMoreObserver.observe(btnLoadMore);
+    }
+
+    return {
+      init: loadContent,
+    };
+  })();
+
+  // infiniteLoad.init();
+
+  //#endregion infinite scroll
 </script>
