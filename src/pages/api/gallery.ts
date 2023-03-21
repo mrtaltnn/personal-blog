@@ -4,7 +4,6 @@ export const get: APIRoute = async ({ params, request }) => {
   const url = new URL(request.url)
   const _page = (new URLSearchParams(url.search)).get("page") || "1";
   let page: number = parseInt(_page);
-  console.log(page);
   
 
   const data = await getUnsplachUserPhotos(page);
