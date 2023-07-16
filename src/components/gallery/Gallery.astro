@@ -1,0 +1,366 @@
+---
+export interface Props {
+  pohotoDataList: {
+    id: string;
+    description: string;
+    alt: string;
+    width: number;
+    height: number;
+    color: string;
+    blur_hash: string;
+    urls: {
+      raw: string;
+      full: string;
+      regular: string;
+      small: string;
+      thumb: string;
+      small_s3: string;
+    };
+  }[];
+}
+const { pohotoDataList } = Astro.props;
+---
+
+<div class="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4 p-8 posts">
+  <!-- <div class="columns-3xs md:columns-xs lg:columns-md gap-4 space-y-4 p-8">  -->
+  {
+    pohotoDataList.map((photo, i) => (
+      <div class={`h-min w-full rounded-xl img-box`} id={`img-box-${i + 1}`}>
+        <img
+          class="h-full w-full object-cover rounded-xl"
+          src={photo.urls.regular}
+          alt={photo.alt}
+          id={`img-${i + 1}`}
+        />
+      </div>
+    ))
+  }
+</div>
+<div class="load-more md:flex md:justify-center">
+  <a href="#" class="btn btn-outline btn-secondary btn-load-more">Load More</a>
+</div>
+
+<style is:global>
+  .gg-container-main {
+    --gap-length: 2px;
+    --row-height: 200px;
+    --column-width: 220px;
+
+    --main-color: #ddd;
+    --secondary-color: #eee;
+    --txt-color: #111;
+    --img-bg-color: rgba(20, 20, 20, 0.9);
+    --backdrop-color: rgba(30, 30, 30, 0.9);
+  }
+
+  .gg-box img:hover {
+    opacity: 0.98;
+  }
+
+  #gg-screen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: var(--backdrop-color);
+    z-index: 9999;
+    text-align: center;
+  }
+
+  #gg-screen .gg-image {
+    height: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #gg-screen .gg-image img {
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+  }
+
+  .gg-btn {
+    width: 35px;
+    height: 35px;
+    background: #37415175;
+    color: var(--txt-color);
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+    -moz-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    -webkit-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+    font-size: 20px;
+    box-sizing: border-box;
+    padding-left: 2px;
+    position: fixed;
+    bottom: 10px;
+  }
+
+  .gg-btn:hover {
+    background: var(--secondary-color);
+  }
+
+  .gg-close {
+    top: 10px;
+  }
+
+  .gg-close,
+  .gg-next {
+    right: 10px;
+  }
+
+  .gg-prev {
+    right: 50px;
+  }
+
+  .gg-prev,
+  .gg-next {
+    bottom: 10px;
+  }
+</style>
+
+<script is:inline>
+  const root = document.querySelector("body, html");
+  const container = document.querySelector(".gg-container-main");
+  const images = document.querySelectorAll(".img-box > img");
+  let imageCount = images.length;
+  let first = images[0].src,
+    last = images[imageCount - 1].src;
+
+  var page = 1;
+
+  let postsLoaded = false;
+  let postsContent = document.querySelector(".posts");
+  let btnLoadMore = document.querySelector(".btn-load-more");
+
+  const loadContent = function () {
+    page++;
+
+    const loadPosts = async () => {
+      const url = `http://localhost:3000/api/gallery?page=${page}`;
+      const request = await fetch(url);
+      const posts = await request.json();
+      var data = posts.data;
+      var i = imageCount;
+      imageCount += data.length;
+      last = data[data.length - 1].urls.regular;
+
+      const imgFragment = document.createDocumentFragment();
+      data.map(function (x) {
+        i++;
+        var imgDiv = document.createElement("div");
+        imgDiv.className = "h-min w-full rounded-xl img-box";
+        imgDiv.id = `img-box-${i}`;
+        var img = document.createElement("img");
+        img.className = "h-full w-full object-cover rounded-xl";
+        img.src = `${x.urls.regular}`;
+        img.alt = `${x.alt}`;
+        img.id = `img-${i}`;
+
+        addImageViewModalClickEvent(img, first, last, imageCount, i);
+        imgFragment.appendChild(imgDiv).appendChild(img);
+      });
+
+      postsContent.appendChild(imgFragment);
+
+      postsLoaded = true;
+    };
+
+    loadPosts();
+  };
+
+  //#region infiniteLoad
+  const infiniteLoad = (() => {
+    if ("IntersectionObserver" in window) {
+      const loadMoreCallback = (entries, observer) => {
+        entries.forEach((btn) => {
+          if (btn.isIntersecting && postsLoaded === true) {
+            postsLoaded = false;
+            loadContent();
+          }
+        });
+      };
+
+      let loadMoreObserver = new IntersectionObserver(loadMoreCallback, {
+        threshold: 1.0,
+      });
+      loadMoreObserver.observe(btnLoadMore);
+    }
+
+    return {
+      init: loadContent,
+    };
+  })();
+
+  infiniteLoad.init();
+
+  //#endregion infinite scroll
+
+  const addImageViewModalClickEvent = function (
+    image,
+    galleryFirstİmgSrc,
+    galleryLastİmgSrc,
+    imageCount,
+    id
+  ) {
+    image.addEventListener("click", function (i) {
+      var currentImg = this;
+      const parentItem = currentImg.parentElement,
+        screenItem = document.createElement("div");
+      screenItem.id = "gg-screen";
+      container.prepend(screenItem);
+      if (parentItem.hasAttribute("data-theme"))
+        screenItem.setAttribute("data-theme", "dark");
+      var route = currentImg.src;
+      root.style.overflow = "hidden";
+      screenItem.innerHTML =
+        '<div class="gg-image"></div><div class="gg-close gg-btn rounded">✖️</div><div class="gg-next gg-btn rounded">➡️</div><div class="gg-prev gg-btn rounded">⬅️</div>';
+
+      const imgItem = document.querySelector(".gg-image"),
+        prevBtn = document.querySelector(".gg-prev"),
+        nextBtn = document.querySelector(".gg-next"),
+        close = document.querySelector(".gg-close");
+      imgItem.innerHTML = '<img class="rounded-xl" src="' + route + '">';
+
+      if (imageCount > 1) {
+        if (route == galleryFirstİmgSrc) {
+          prevBtn.hidden = true;
+          var prevImg = false;
+          var nextImg = currentImg.nextElementSibling;
+        } else if (route == galleryLastİmgSrc) {
+          nextBtn.hidden = true;
+          var nextImg = false;
+          var prevImg = currentImg.previousElementSibling;
+        } else {
+          var prevImg = currentImg.previousElementSibling;
+          var nextImg = currentImg.nextElementSibling;
+        }
+      } else {
+        prevBtn.hidden = true;
+        nextBtn.hidden = true;
+      }
+
+      document.querySelector(".gg-image").addEventListener("click", (e) => {
+        hide();
+      });
+
+      screenItem.addEventListener("click", function (e) {
+        if (e.target == this || e.target == close) hide();
+      });
+
+      root.addEventListener("keydown", function (e) {
+        if (e.keyCode == 37 || e.keyCode == 38) prev();
+        if (e.keyCode == 39 || e.keyCode == 40) next();
+        if (e.keyCode == 27) hide();
+      });
+
+      prevBtn.addEventListener("click", prev);
+      nextBtn.addEventListener("click", next);
+
+      //#region swiping
+      var swipeCont = document.querySelector(".gg-container-main");
+
+      swipeCont.addEventListener("touchstart", startTouch, false);
+      swipeCont.addEventListener("touchmove", moveTouch, false);
+
+      var initialX = null;
+      var initialY = null;
+
+      function startTouch(e) {
+        initialX = e.touches[0].clientX;
+        initialY = e.touches[0].clientY;
+      }
+
+      function moveTouch(e) {
+        if (initialX === null) {
+          return;
+        }
+
+        if (initialY === null) {
+          return;
+        }
+
+        var currentX = e.touches[0].clientX;
+        var currentY = e.touches[0].clientY;
+
+        var diffX = initialX - currentX;
+        var diffY = initialY - currentY;
+
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+          // sliding horizontally
+          if (diffX > 0) {
+            // swiped left
+            next();
+          } else {
+            // swiped right
+            prev();
+          }
+        } else {
+          // sliding vertically
+          if (diffY > 0) {
+            // swiped up
+            prev();
+          } else {
+            // swiped down
+            next();
+          }
+        }
+
+        initialX = null;
+        initialY = null;
+
+        e.preventDefault();
+      }
+      //#endregion swiping
+
+      function prev() {
+        var currentImgIdNumber = currentImg.id.replace("img-", "");
+        var prevImgIdNumber = Number(currentImgIdNumber) - 1;
+        var prevImgId = `img-${prevImgIdNumber}`;
+
+        var mainImg = document.querySelector(".gg-image > img").src;
+        nextBtn.hidden = false;
+        prevBtn.hidden = mainImg === first;
+        if (prevBtn.hidden == true) return;
+
+        var prevImg = document.getElementById(prevImgId);
+        imgItem.innerHTML = '<img src="' + prevImg.src + '">';
+        currentImg = document.getElementById(prevImgId);
+      }
+
+      function next() {
+        var currentImgIdNumber = currentImg.id.replace("img-", "");
+        var nextImgIdNumber = Number(currentImgIdNumber) + 1;
+        var nextImgId = `img-${nextImgIdNumber}`;
+
+        var mainImg = document.querySelector(".gg-image > img").src;
+        prevBtn.hidden = false;
+        nextBtn.hidden = mainImg === last;
+        if (nextBtn.hidden == true){
+          loadContent();
+        }
+
+        var nextImg = document.getElementById(nextImgId);
+        imgItem.innerHTML = '<img src="' + nextImg.src + '">';
+        currentImg = document.getElementById(nextImgId);
+      }
+
+      function hide() {
+        root.style.overflow = "auto";
+        screenItem.remove();
+      }
+    });
+  };
+
+  //#region image-modal
+
+  for (var i = 0; i < imageCount; i++) {
+    var image = images[i];
+    addImageViewModalClickEvent(image, first, last, imageCount, i);
+  }
+  //#endregion image-modal
+</script>

@@ -1,0 +1,55 @@
+---
+export const prerender = true;
+import CardItem from '../../../components/CardItem.astro';
+import Layout from '../../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+    const allPosts = await Astro.glob('../*.mdx');
+
+
+
+    console.log("burada");
+    
+    console.log(allPosts);
+    
+
+const categories = [...new Set(allPosts.map((post) => post.frontmatter.category).flat())];
+return categories.map((category) => {
+    const filteredPosts = allPosts.filter((post) => post.frontmatter.category==category);
+    return {
+      params: { category },
+      props: { posts: filteredPosts },
+    };
+  });
+}
+
+const { category } = Astro.params;
+const { posts } = Astro.props;
+
+
+
+---
+
+<Layout title={category}>
+    <div class="navbar bg-base-200 rounded-box">
+        <a class="btn btn-ghost normal-case text-xl">Kategor: {category}</a>
+      </div>
+
+    <div class="container">
+      <div class="flex flex-wrap -mx-1 lg:-mx-4">
+        {
+          posts.map((post:any) => (
+            <CardItem
+              url={post.url}
+              title={post.frontmatter.title}
+              description={post.frontmatter.description}
+              tags={post.frontmatter.tags}
+              pubDate={post.frontmatter.pubDate}
+              image={post.frontmatter.image}
+            />
+          ))
+        }
+      </div>
+    </div>
+    
+</Layout>

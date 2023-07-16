@@ -1,0 +1,58 @@
+---
+layout: ../../layouts/MdPostLayout.astro
+title: 'Blog Altyapısı: Teknoloji Seçimi'
+description: 'Altyapı ve teknoloji seçimi'
+tags: ["teknik", "blog", "altyapı"]
+category: 'Tech'
+pubDate: 2023-07-10
+image:
+    url: 'https://source.unsplash.com/7pYmfO2hoq0/800x599'
+    alt: 'Alt yapı'
+draft: false
+---
+
+
+
+
+İlk blog yazım dan selamlar. Şu sıralar bir blog sitesi açarak öğrendiklerimi ve hobi amaçlı yaptığım işleri paylaşmayı düşünüyorum. Uzun zaman önce daha doğrusu sektörü ve yazılım teknolojilerini keşif dönemimde yine bu domain altında WordPress altında yazılım hakkında öğrendiklerimi ve deneyimlerimi paylaşıyordum. İçerikler MySQL veri tabanında tutuluyor, içerik yönetimini WordPress in kendi CMS i üzerinden yapıyordum. Aynı zamanda WordPress'i deneyimlediğim bir dönemdi ve bir taşıma sırasında baaazı dosyalar uçtu. Sonrasında ise ben pek vakit ayıramadım.
+
+Neyse. WordPress hala mükemmel bir sistem, ama basit bir blog sitesi için bence fazla komplike. Aslında direkt Medium üzerinden de devam edebilirdim ancak burayı sadece yazı yazmak gibi düşünmüyorum, fotoğraf vs. de paylaşabilirim. Hem hazıra dağ dayanmaz.
+
+Günümüzde blog yazıları yazmak için kullanılacak en iyi şey markdown formatıdır. Basitçe markdown metinden Html'e dönüştürme işini yapar. Belirlenmiş kuralları vardır, bu kurallara göre html çıktısını üretir ([örnek karşılaştırma](https://codingnconcepts.com/markdown/markdown-vs-html/)). Medium da temelde bunu kullanır.
+
+Bir web sitesi oluşturmak için günümüzde birçok teknoloji var. ReactJs uzun zamandır en popüler ui framework olarak karşımıza çıkıyor. React'ı tek başına kullanabileceğimiz gibi(CSR) next, remix gibi frameworkler ile SSR(server side rendering) avantajlarından faydalanılabilir. Bunun dışında VueJs ve NUXT’ta aynı mantıkta kullanılabilir. Bu frameworkler ile markdown rendering kolay bir şekilde yapılabilir. Bunların dışında C#, GO, JAVA gibi yazılım dillerinin de kendi içerisinde web uygulaması geliştirmek için şablonları var ancak günümüzde, özellikle içerik odaklı web siteleri için çok tercih edilmiyor. Temel sebep ise bu dillerin MPA(multi-page application) dediğimiz, her sayfa isteğinin sunucuda ayrı ayrı oluşturulduğu mimariyi kullanması ve uygulama içerisinde JavaScript dışında bu dillerinde iç içe geçmesi olarak görülebilir. Oysa yeni nesil JavaScript tabanlı frameworkler SPA(single-page application) dediğimiz mimariyi kullanır. Bu mimaride, ilk istekte sayfa bir kere yüklenir ve diğer içerikler kullanıcı etkileşime geçtikçe dinamik olarak, sayfa yeniden yüklenmesi yapılmayarak güncellenir. İki mimarinin de sağladığı çeşitli avantajlar var tabii, geliştirilecek uygulamaya göre iki mimariden biri diğerine göre iyidir diyebiliriz.([Detaylı karşılaştırma](https://cleancommit.io/blog/spa-vs-mpa-which-is-the-king/))
+
+Blog içerikleri daha çok statik yapıda olacağı için content-focused bir mimariyi benimseyen framework'ü seçmek daha doğru olacaktır. En başta kişisel olarak önemsediğim, seçeceğim çerçevenin sağlaması gereken özellikleri şu şekilde sıralayabilirim;
+
+- Basitlik
+- Gelişmiş markdown(özellikle MDX) desteği
+- SEO dostu
+- Sadece javascript(Typescript), HTML,CSS ile geliştirme
+- Component-driven mimariyi benimsemesi
+- File-based routing
+
+ Bu özellikleri NextJs gibi birçok statik site oluşturucu sağlıyor. Ben aşağıda bahsedeceğim özelliklerinden dolayı AstroJs ile ilerlemeye karar verdim. Astro kendini şu şekilde tanımlıyor;
+
+> Astro is the all-in-one web framework designed for speed. Pull your content from anywhere and deploy everywhere, all powered by your favorite UI components and libraries.
+
+![Excited](https://media.giphy.com/media/xTiN0CNHgoRf1Ha7CM/giphy-downsized.gif)
+
+
+## Astro'nun sağladığı temel özellikler
+1. **UI-agnostic**
+ Next, Nuxt, Remix gibi çerçevelerin aksine Astro ile sadece react ya da vue gibi frameworklere bağımlı değilsiniz, istediğiniz framework ten birini ya da ayrı ayrı komponentler oluşturarak bir sayfa içinde react, vue, svelte gibi farklı frameworkler ile yazılmış birden fazla kodu kullanabilirsiniz. Ayrıca hiç ui framework kullanmadan da vanilla js ile ilerlemekte mümkün.
+
+2. **Yenilikçi MPA mimarisi**
+ Blog gibi zengin içerikli web siteleri için SEO önemlidir. Geleneksel MPA'lar, yüksek trafik alan web siteleri için performans ve kaynak maliyeti açısından sıkıntılı olsa da arama motorları için en uygun yapılardır. Astro da MPA mimarisini benimseyerek sayfaların sunucuda render edilmesini sağlar. Geleneksel MPA'ların aksine astro partial-hydration mimarisini benimser. Bu mimaride sayfanın çalışması için gerekli minimum JavaScript kodu istemciye iletilir. Örneğin sayfa içerisinde sadece bir form komponenti var, sadece o komponent için JavaScript iletilir. ([Bknz. Astro island](https://docs.astro.build/en/concepts/islands/))
+
+3. **Content-focused**
+ Astro yerleşik olarak markdown ve MDX desteğiyle geliyor.
+
+4. **Yerleşik optimizasyon**
+ Html, Css, JavaScript dosyaları otomatik olarak optimize edilir.
+
+Astro ile ilgili birçok detay söylenebilir, ancak deneyimlerimi başka bir yazıda aktaracağım. Ayrıca kendi web sitesinde konseptlerini, odaklandıkları noktayı ve performans karşılaştırmalarını çok güzel anlatmışlar. ([Şuradan inceleyebilirsiniz](https://docs.astro.build/en/concepts/why-astro/))
+
+
+
+

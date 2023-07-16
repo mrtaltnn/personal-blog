@@ -1,0 +1,8 @@
+---
+const { videoUrl,cssClass,width,height,poster } = Astro.props;
+---
+
+<video class={cssClass} width={width} height={height} poster={poster} controls>
+    <source src={videoUrl} type="video/mp4">
+  Your browser does not support the video tag.
+</video>
