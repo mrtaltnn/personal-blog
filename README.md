@@ -1,4 +1,5 @@
 # personal-blog app
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ea312928-c498-41dd-82ca-976d7ee1f31f/deploy-status)](https://app.netlify.com/sites/mertaltun/deploys)
 
 ## Descriptions
 Personal blog application written in AstroJs
