@@ -5,7 +5,15 @@ const { url, title, description, tags, pubDate, image } = Astro.props;
 <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/2">
   <div class="card w-94 shadow-xl glass">
     <figure>
-      <a href={url}> <img src={image.url} alt={image.alt} /></a>
+      <a href={url} class="min-w-full"> 
+        <!-- <img src={image.url} alt={image.alt} /> -->
+        <img
+          class="w-full h-80 object-cover object-center"
+          src={image.url}
+          alt={image.alt}
+        />
+      
+      </a>
     </figure>
     <div class="card-body">
       <a href={url}>

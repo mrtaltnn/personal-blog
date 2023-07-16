@@ -1,6 +1,6 @@
 ---
 import CardItem from "./CardItem.astro";
-const allPosts = await Astro.glob("../pages/blog/*.md");
+const allPosts = await Astro.glob("../pages/blog/*.mdx");
 const nonDraftPosts = allPosts.filter((post) => !post.frontmatter.draft);
 ---
 

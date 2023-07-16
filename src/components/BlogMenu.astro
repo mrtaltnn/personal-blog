@@ -1,6 +1,6 @@
 ---
 
-const allPosts = await Astro.glob('../pages/blog/*.md');
+const allPosts = await Astro.glob('../pages/blog/*.mdx');
 const nonDraftPosts = allPosts.filter((post) => !post.frontmatter.draft);
 const categories = [...new Set(nonDraftPosts.map((post) => post.frontmatter.category).flat())];
 
