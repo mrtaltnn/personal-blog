@@ -1,2 +1,2 @@
-export const SITE_TITLE = 'Mert Altuns Personal Web app';
-export const SITE_DESCRIPTION = 'My portfolio, blog, cv, resume website.';
+export const SITE_TITLE = `Mert Altun`;
+export const SITE_DESCRIPTION = `Mert Altun's Personal Blog`;
