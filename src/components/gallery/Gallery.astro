@@ -19,6 +19,7 @@ export interface Props {
   }[];
 }
 const { pohotoDataList } = Astro.props;
+const apiUrl=`${import.meta.env.PUBLIC_API_URL}`
 ---
 
 <div class="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4 p-8 posts">
@@ -123,7 +124,7 @@ const { pohotoDataList } = Astro.props;
   }
 </style>
 
-<script is:inline>
+<script is:inline define:vars={{ apiUrl }}>
   const root = document.querySelector("body, html");
   const container = document.querySelector(".gg-container-main");
   const images = document.querySelectorAll(".img-box > img");
@@ -141,7 +142,8 @@ const { pohotoDataList } = Astro.props;
     page++;
 
     const loadPosts = async () => {
-      const url = `${import.meta.env.API_URL_FOR_BROWSER}/gallery?page=${page}`;
+      // const url = `${import.meta.env.PUBLIC_API_URL}/gallery?page=${page}`;
+      const url = `${apiUrl}/gallery?page=${page}`;
       const request = await fetch(url);
       const posts = await request.json();
       var data = posts.data;

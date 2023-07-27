@@ -7,7 +7,7 @@ Personal blog application written in AstroJs. View via [mertaltun.com](https://m
 ## Parameters
 | Parameter(`*` means mandatory)       | Default | Description                                                  |
 | ------------------------------------ | ------- | ------------------------------------------------------------ |
-| *API_URL_FOR_BROWSER*                | 3000    | Spesific Api url 
+| *PUBLIC_API_URL*                | 3000    | Spesific Api url 
 
 ## Quick Start For Development
 

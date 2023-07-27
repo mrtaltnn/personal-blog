@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 const clientFetch = axios.create({
-  baseURL: import.meta.env.API_URL_FOR_BROWSER,
+  baseURL: import.meta.env.PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
   },

@@ -1,6 +1,6 @@
 
 export async function imageGalleryFetch(page: number): Promise<any> {
-    const endpoint = `${import.meta.env.API_URL_FOR_BROWSER}/gallery?page=${page}`;
+    const endpoint = `${import.meta.env.PUBLIC_API_URL}/gallery?page=${page}`;
     
     const response = await fetch(endpoint);
     if (!response.ok) {
