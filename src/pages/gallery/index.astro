@@ -2,21 +2,12 @@
 import Layout from "../../layouts/Layout.astro";
 import Gallery from "../../components/gallery/Gallery.astro";
 import { imageGalleryFetch } from "../../utils/imageGalleryFetch";
-// import clientFetch from "../../utils/clientFetch";
-
-
-
-// const testApi = await clientFetch.get<string>(`gallery`);
 
   var result=await imageGalleryFetch(1);
-  // console.log(result);
   var data=result.data;
-  
-
 ---
 
 <Layout title="Gallery">
-  <!-- <div>{testApi}</div> -->
-  <div class="text-5xl font-caveat"> Fotoğrafladıklarım</div>
+  <div class="text-5xl font-caveat"> My Photos</div>
   <Gallery pohotoDataList={data}/>
 </Layout>

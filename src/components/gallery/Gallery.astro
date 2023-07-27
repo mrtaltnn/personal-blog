@@ -4,17 +4,17 @@ export interface Props {
     id: string;
     description: string;
     alt: string;
-    width: number;
-    height: number;
-    color: string;
-    blur_hash: string;
     urls: {
-      raw: string;
-      full: string;
-      regular: string;
-      small: string;
-      thumb: string;
-      small_s3: string;
+      original: {
+        url: string;
+        w: string;
+        h: string;
+      };
+      medium: {
+        url: string;
+        w: string;
+        h: string;
+      };
     };
   }[];
 }
@@ -28,7 +28,7 @@ const { pohotoDataList } = Astro.props;
       <div class={`h-min w-full rounded-xl img-box`} id={`img-box-${i + 1}`}>
         <img
           class="h-full w-full object-cover rounded-xl"
-          src={photo.urls.regular}
+          src={photo.urls.original.url}
           alt={photo.alt}
           id={`img-${i + 1}`}
         />
@@ -145,27 +145,31 @@ const { pohotoDataList } = Astro.props;
       const request = await fetch(url);
       const posts = await request.json();
       var data = posts.data;
-      var i = imageCount;
-      imageCount += data.length;
-      last = data[data.length - 1].urls.regular;
+      if (typeof data !== "undefined" && data.length > 0) {
+        var i = imageCount;
+        imageCount += data.length;
+        last = data[data.length - 1].urls.original.url;
 
-      const imgFragment = document.createDocumentFragment();
-      data.map(function (x) {
-        i++;
-        var imgDiv = document.createElement("div");
-        imgDiv.className = "h-min w-full rounded-xl img-box";
-        imgDiv.id = `img-box-${i}`;
-        var img = document.createElement("img");
-        img.className = "h-full w-full object-cover rounded-xl";
-        img.src = `${x.urls.regular}`;
-        img.alt = `${x.alt}`;
-        img.id = `img-${i}`;
+        const imgFragment = document.createDocumentFragment();
+        data.map(function (x) {
+          i++;
+          var imgDiv = document.createElement("div");
+          imgDiv.className = "h-min w-full rounded-xl img-box";
+          imgDiv.id = `img-box-${i}`;
+          var img = document.createElement("img");
+          img.className = "h-full w-full object-cover rounded-xl";
+          img.src = `${x.urls.original.url}`;
+          img.alt = `${x.alt}`;
+          img.id = `img-${i}`;
 
-        addImageViewModalClickEvent(img, first, last, imageCount, i);
-        imgFragment.appendChild(imgDiv).appendChild(img);
-      });
+          addImageViewModalClickEvent(img, first, last, imageCount, i);
+          imgFragment.appendChild(imgDiv).appendChild(img);
+        });
 
-      postsContent.appendChild(imgFragment);
+        postsContent.appendChild(imgFragment);
+      } else {
+        btnLoadMore.style.display= 'none';
+      }
 
       postsLoaded = true;
     };
@@ -229,15 +233,15 @@ const { pohotoDataList } = Astro.props;
       if (imageCount > 1) {
         if (route == galleryFirstİmgSrc) {
           prevBtn.hidden = true;
-          var prevImg = false;
-          var nextImg = currentImg.nextElementSibling;
+          prevImg = false;
+          nextImg = currentImg.nextElementSibling;
         } else if (route == galleryLastİmgSrc) {
           nextBtn.hidden = true;
-          var nextImg = false;
-          var prevImg = currentImg.previousElementSibling;
+          nextImg = false;
+          prevImg = currentImg.previousElementSibling;
         } else {
-          var prevImg = currentImg.previousElementSibling;
-          var nextImg = currentImg.nextElementSibling;
+          prevImg = currentImg.previousElementSibling;
+          nextImg = currentImg.nextElementSibling;
         }
       } else {
         prevBtn.hidden = true;
@@ -340,7 +344,7 @@ const { pohotoDataList } = Astro.props;
         var mainImg = document.querySelector(".gg-image > img").src;
         prevBtn.hidden = false;
         nextBtn.hidden = mainImg === last;
-        if (nextBtn.hidden == true){
+        if (nextBtn.hidden == true) {
           loadContent();
         }
 

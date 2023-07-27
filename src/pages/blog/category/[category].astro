@@ -6,13 +6,6 @@ import Layout from '../../../layouts/Layout.astro';
 export async function getStaticPaths() {
     const allPosts = await Astro.glob('../*.mdx');
 
-
-
-    console.log("burada");
-    
-    console.log(allPosts);
-    
-
 const categories = [...new Set(allPosts.map((post) => post.frontmatter.category).flat())];
 return categories.map((category) => {
     const filteredPosts = allPosts.filter((post) => post.frontmatter.category==category);
